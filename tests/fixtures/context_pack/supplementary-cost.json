@@ -1,0 +1,459 @@
+{
+  "configuration": {
+    "append_rounds_zero_based": [
+      10,
+      20,
+      30
+    ],
+    "chunk_bytes": 512,
+    "gzip": {
+      "compresslevel": 9,
+      "mtime": 0,
+      "shared_state": false
+    },
+    "initial_turns": 8,
+    "max_bytes": 4096,
+    "query": "remote",
+    "rounds": 40,
+    "selection_terms": [
+      "remote",
+      "button",
+      "design",
+      "control"
+    ],
+    "switch_query": "control",
+    "switch_round_zero_based": 32,
+    "turn_indices": [
+      53,
+      64,
+      151,
+      184,
+      195,
+      203,
+      208,
+      223,
+      229,
+      246,
+      257
+    ],
+    "turn_utf8_bytes_inclusive": [
+      120,
+      900
+    ]
+  },
+  "distinct_contexts": 5,
+  "input_sha256": "911e56db0d8482f1e730bae0a8fcf0ab0095c94abb000ba0516e975fa6e48b31",
+  "measurement": "supplementary; official 40-round schedule not supplied",
+  "nonempty_rounds": 40,
+  "rounds": [
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 2408,
+      "kind": "pack",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 0
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 1
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 2
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 3
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 4
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 5
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 6
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 7
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 8
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 8,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 9
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 2511,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 10
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 11
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 12
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 13
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 14
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 15
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 16
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 17
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 18
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 827,
+      "imported_turns": 9,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 19
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 2511,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 20
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 21
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 22
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 23
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 24
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 25
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 26
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 27
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 28
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 10,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 29
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 11,
+      "incremental_bytes": 2511,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 30
+    },
+    {
+      "full_pack_bytes": 2408,
+      "gzip_bytes": 828,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "remote",
+      "raw_bytes": 1678,
+      "round": 31
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 2008,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 32
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 33
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 34
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 35
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 36
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 37
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 38
+    },
+    {
+      "full_pack_bytes": 1905,
+      "gzip_bytes": 713,
+      "imported_turns": 11,
+      "incremental_bytes": 256,
+      "kind": "delta",
+      "query": "control",
+      "raw_bytes": 1305,
+      "round": 39
+    }
+  ],
+  "savings_vs_full_pack": 0.7734571379041345,
+  "savings_vs_gzip": 0.3504504504504504,
+  "savings_vs_raw": 0.6739896470001248,
+  "totals": {
+    "full_pack_bytes": 92296,
+    "gzip_bytes": 32190,
+    "incremental_bytes": 20909,
+    "raw_bytes": 64136
+  }
+}
