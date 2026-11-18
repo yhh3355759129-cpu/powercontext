@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from typing import Any
 
 from sqlalchemy import and_, delete, func, insert, or_, select, update
 from sqlalchemy.dialects.mysql import insert as mysql_insert
@@ -50,6 +51,7 @@ from powercontext.builtin.artifacts.topic_memory import (
 from powercontext.builtin.artifacts.topic_memory.fusion import _fuse_topic_memory_rankings
 from powercontext.builtin.persistence.artifacts import ArtifactRepository
 from powercontext.builtin.persistence.errors import InvalidRepositoryArgumentError
+from powercontext.builtin.persistence.source_lifecycle import blocked_topics, topic_visible
 from powercontext.builtin.persistence.supervision import database_utc_now
 from powercontext.builtin.persistence.tables import (
     ARTIFACT_HEADS_TABLE,
@@ -379,6 +381,7 @@ class TopicMemoryRepository:
             .where(
                 TOPIC_MEMORY_ACTIVE_TOPICS_TABLE.c.scope_id == scope_id,
                 TOPIC_MEMORY_ACTIVE_TOPICS_TABLE.c.family == TopicMemory.family,
+                topic_visible(scope_id, TOPIC_MEMORY_ACTIVE_TOPICS_TABLE.c.artifact_id),
             )
         )
         if tag_filter is not None:
@@ -486,7 +489,24 @@ class TopicMemoryRepository:
             embedding_profile=embedding_profile,
             admission=admission,
         )
+        blocked = await blocked_topics(connection, scope_id)
+        if blocked:
+            request = request.model_copy(
+                update={
+                    "candidate_limit": min(MAX_TOPIC_MEMORY_CHANNEL_CANDIDATES, request.candidate_limit + len(blocked))
+                }
+            )
         channels = await self.index.search(connection, scope_id, request)
+        if blocked:
+            updates: dict[str, Any] = {}
+            for name in ("topic_fts", "topic_vector", "detail_fts", "detail_vector"):
+                hits = getattr(channels, name)
+                visible = tuple(hit for hit in hits if hit.artifact_ref.artifact_id not in blocked)
+                updates[name] = visible
+                eligible = getattr(channels, f"{name}_eligible")
+                if eligible is not None:
+                    updates[f"{name}_eligible"] = max(0, eligible - (len(hits) - len(visible)))
+            channels = channels.model_copy(update=updates)
         await self._check_retrieval_shape(connection)
         outcome = _fuse_topic_memory_rankings(query, channels, limit, mode=used_mode, admission=admission)
         return TopicMemorySearchResult(
