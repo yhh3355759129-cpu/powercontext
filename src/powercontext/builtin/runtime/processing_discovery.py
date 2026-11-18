@@ -16,14 +16,39 @@
 
 from __future__ import annotations
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncConnection
 
 from powercontext.builtin.persistence.cursors import SourceCursorRepository
 from powercontext.builtin.persistence.database import AsyncDatabase
 from powercontext.builtin.persistence.processing_intents import ArtifactProcessingIntentRepository
 from powercontext.builtin.persistence.supervision import ArtifactProcessingFence, ArtifactProcessingLeaseRepository
-from powercontext.builtin.persistence.tables import PROFILE_POLICIES_TABLE, SOURCE_JOURNAL_HEADS_TABLE
+from powercontext.builtin.persistence.tables import PROFILE_POLICIES_TABLE, SOURCE_JOURNAL_HEADS_TABLE, SOURCES_TABLE
+
+
+async def source_count_scopes(
+    connection: AsyncConnection, scope_ids: tuple[str, ...], binding_name: str, threshold: int
+) -> frozenset[str]:
+    """Qualify actual journal identities after each family's successful cursor.
+
+    Probe only an indexed, threshold-bounded tail per scope. Positions need not
+    be contiguous, and lineage-only rows count without loading their payloads.
+    """
+    cursors = await SourceCursorRepository().load_many(connection, scope_ids, binding_name)
+    ready = set()
+    for scope in scope_ids:
+        cursor = cursors.get(scope)
+        after = 0 if cursor is None else cursor.cursor.sequence
+        tail = (
+            select(SOURCES_TABLE.c.journal_position)
+            .where(SOURCES_TABLE.c.scope_id == scope, SOURCES_TABLE.c.journal_position > after)
+            .limit(min(threshold, 2**63 - 1))  # SQL LIMIT is a signed 64-bit value.
+            .subquery()
+        )
+        count = await connection.scalar(select(func.count()).select_from(tail))
+        if count == threshold:
+            ready.add(scope)
+    return frozenset(ready)
 
 
 async def enabled_profile_scopes(connection: AsyncConnection, scope_ids: tuple[str, ...]) -> frozenset[str]:
