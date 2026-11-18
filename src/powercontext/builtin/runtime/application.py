@@ -145,6 +145,7 @@ from powercontext.builtin.persistence.artifact_governance import (
 )
 from powercontext.builtin.persistence.database import AsyncDatabase
 from powercontext.builtin.persistence.skill_publications import SkillPublication
+from powercontext.builtin.persistence.sources import SourceRepository
 from powercontext.builtin.publication import ArtifactPublicationApplication
 from powercontext.builtin.records import (
     ArtifactCreated,
@@ -3045,6 +3046,7 @@ class BuiltinRuntime:
         dream_service: DreamService | None = None,
         generation_concurrency: int = 4,
         lifecycle_database: AsyncDatabase | None = None,
+        lifecycle_sources: SourceRepository | None = None,
     ) -> None:
         if source_window_limit < 1:
             raise _RuntimeConfigurationError("source_window_limit")
@@ -3127,7 +3129,7 @@ class BuiltinRuntime:
         self.handoff = HandoffApplication(self)
         self.work = WorkApplication(self)
         self.memory = MemoryApplication(self)
-        self.lifecycle = SourceLifecycleApplication(self, lifecycle_database)
+        self.lifecycle = SourceLifecycleApplication(self, lifecycle_database, lifecycle_sources)
         self.topic_memory = TopicMemoryApplication(self)
         self.records = RecordApplication(self)
         self.prompts = PromptApplication(self)

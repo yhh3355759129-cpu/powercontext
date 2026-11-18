@@ -244,3 +244,32 @@ def test_topic_browse_hides_withdrawn_heads_but_exact_get_keeps_original_body():
                         assert published.topic.content.title == node
 
     asyncio.run(scenario())
+
+
+def test_register_captured_observation_after_restart(tmp_path):
+    from powercontext.builtin.runtime import SubmitSourceObservation
+    from powercontext.builtin.scope import ScopeDraft
+    from powercontext.sources import SourceDefinitionRegistry, manifest_for_definition, project_source_for_transport
+    from powercontext.sources.csv_rows import CSV_ROW_SOURCE_DEFINITION, CSVDocumentInput, parse_csv_document
+
+    async def scenario():
+        config = BuiltinConfig(database=SQLiteConfig(url=f"sqlite+aiosqlite:///{tmp_path / 'rows.db'}"))
+        registry = SourceDefinitionRegistry((CSV_ROW_SOURCE_DEFINITION,))
+        (row,) = parse_csv_document(
+            CSVDocumentInput(document_id="receipts", primary_key="id", content=b"id,total\n1,27\n")
+        )
+        observation = project_source_for_transport(registry, await registry.resolve(row))
+        async with open_builtin_runtime(config) as runtime:
+            assert runtime.scopes is not None
+            scope = await runtime.scopes.create(ScopeDraft(title="Rows", summary="Receipts", idempotency_key="rows"))
+            await runtime.ingestion.register(manifest_for_definition(CSV_ROW_SOURCE_DEFINITION))
+            receipt = await runtime.ingestion.submit(
+                SubmitSourceObservation(scope_id=scope.scope_id, observation=observation)
+            )
+        async with open_builtin_runtime(config) as runtime:
+            service = runtime.lifecycle.for_scope(scope.scope_id)
+            await service.register_source("row", receipt.source_ref, revision=3)
+            assert await service.apply(checks.event("row", 1, False)) == []
+            assert await service.resolve("row", purpose="audit") == receipt.source_ref
+
+    asyncio.run(scenario())

@@ -23,9 +23,11 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue, StrictBool, field_
 from powercontext.artifacts import ArtifactRef, MemoryCitation
 from powercontext.builtin.persistence.database import AsyncDatabase
 from powercontext.builtin.persistence.source_lifecycle import load_nodes, save_node
+from powercontext.builtin.persistence.sources import SourceRepository
 from powercontext.builtin.runtime.models import GetMemoryEntryRequest
+from powercontext.builtin.sources import BUILTIN_SOURCE_REGISTRY
 from powercontext.builtin.sources.journal import validate_scope_id
-from powercontext.sources import SourceRef
+from powercontext.sources import SourceMaterialization, SourceRef
 
 if TYPE_CHECKING:
     from powercontext.builtin.runtime.application import BuiltinRuntime
@@ -70,19 +72,25 @@ class _Node(BaseModel):
 
 
 class SourceLifecycleApplication:
-    def __init__(self, runtime: BuiltinRuntime, database: AsyncDatabase | None) -> None:
+    def __init__(
+        self, runtime: BuiltinRuntime, database: AsyncDatabase | None, sources: SourceRepository | None = None
+    ) -> None:
         self._runtime = runtime
         self._database = database
+        self._sources = sources if sources is not None else SourceRepository(BUILTIN_SOURCE_REGISTRY)
 
     def for_scope(self, scope_id: str, /) -> ScopedSourceLifecycle:
         if self._database is None:
             raise SourceLifecycleError("lifecycle requires a relational runtime")  # noqa: TRY003
-        return ScopedSourceLifecycle(self._runtime, self._database, validate_scope_id(scope_id))
+        return ScopedSourceLifecycle(self._runtime, self._database, self._sources, validate_scope_id(scope_id))
 
 
 class ScopedSourceLifecycle:
-    def __init__(self, runtime: BuiltinRuntime, database: AsyncDatabase, scope_id: str) -> None:
+    def __init__(
+        self, runtime: BuiltinRuntime, database: AsyncDatabase, sources: SourceRepository, scope_id: str
+    ) -> None:
         self._runtime, self._database, self.scope_id = runtime, database, scope_id
+        self._sources = sources
 
     async def _load(self) -> dict[str, _Node]:
         async with self._database.transaction() as connection:
@@ -150,11 +158,16 @@ class ScopedSourceLifecycle:
             raise SourceLifecycleError("node_id must be a non-blank string")  # noqa: TRY003
         return node_id
 
+    async def _validate_captured_source(self, ref: SourceRef) -> None:
+        async with self._database.transaction() as connection:
+            stored = await self._sources.get(connection, self.scope_id, ref)
+        if stored.value.materialization != SourceMaterialization.CAPTURED:
+            raise SourceLifecycleError("lifecycle requires a captured Source")  # noqa: TRY003
+
     async def _validate_reference(self, node: _Node) -> None:
         try:
             if node.kind == "source":
-                ref = SourceRef.model_validate(node.reference)
-                await self._runtime.records.for_scope(self.scope_id).get_source(ref.source_type, ref.source_id)
+                await self._validate_captured_source(SourceRef.model_validate(node.reference))
             elif node.kind == "memory":
                 await self._runtime.memory.for_scope(self.scope_id).get(
                     GetMemoryEntryRequest(citation=MemoryCitation.model_validate(node.reference))
@@ -164,6 +177,8 @@ class ScopedSourceLifecycle:
                 await self._runtime.records.for_scope(self.scope_id).get_artifact_revision(
                     ref.family, ref.artifact_id, ref.revision
                 )
+        except SourceLifecycleError:
+            raise
         except Exception as error:
             raise SourceLifecycleError("registered reference must be readable in this scope") from error  # noqa: TRY003
 
